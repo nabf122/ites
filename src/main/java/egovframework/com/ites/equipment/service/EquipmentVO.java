@@ -20,7 +20,7 @@ public class EquipmentVO {
 	/**
      * 장비번호(자산관리번호)
      */
-    private String equipmentId = "";
+    private String equipmentNo = "";
     /**
      * 사용자 아이디
      */
@@ -58,11 +58,11 @@ public class EquipmentVO {
      */
     private String remark = "";
     
-	public String getEquipmentId() {
-		return equipmentId;
+	public String getEquipmentNo() {
+		return equipmentNo;
 	}
-	public void setEquipmentId(String equipmentId) {
-		this.equipmentId = equipmentId;
+	public void setEquipmentNo(String equipmentNo) {
+		this.equipmentNo = equipmentNo;
 	}
 	public String getUserId() {
 		return userId;

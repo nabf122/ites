@@ -1,16 +1,20 @@
 package egovframework.com.ites.user.service;
 
-import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import egovframework.com.ites.equipment.mapper.EquipmentMapper;
 import egovframework.com.ites.user.mapper.UserMapper;
 
 @Service
 public class UserService {
 
-    private final UserMapper userMapper = null;
+	@Autowired
+    private final UserMapper userMapper;
+    
+    public UserService(UserMapper userMapper) {
+        this.userMapper = userMapper;
+    }
 
     public UserVO findUserInfo(String orgName, String userName) {
         return userMapper.selectUserInfo(orgName, userName);

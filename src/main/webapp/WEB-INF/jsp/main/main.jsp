@@ -18,7 +18,19 @@
 <script src="${pageContext.request.contextPath}/js/jquery-3.6.0.min.js"></script>
 <script>
 	function findUser() {
-	    $.get("/ites/user/find", {
+		
+		// Validation 체크
+		if($("#orgName").val().trim() === ""){
+			alert("부서명은 필수 값입니다.");
+			return;
+		}
+		
+		if($("#userName").val().trim() === ""){
+			alert("사용자명은 필수 값입니다.");
+			return;
+		}
+		
+	    $.get("/user/find", {
 	        orgName: $("#orgName").val(),
 	        userName: $("#userName").val()
 	    }, function(res) {
@@ -32,7 +44,7 @@
 	}
 	
 	function loadEquipment(userId) {
-	    $.get("/ites/equipment/list", { userId }, function(list) {
+	    $.get("/equipment/list", { userId }, function(list) {
 	        let html = "";
 	        list.forEach((e) => {
 	            html += makeRow(e);
@@ -45,7 +57,7 @@
 	    return `
 	    <tr>
 	        <td>
-	        	<input type="hidden" class="equipmentId" value="${e.equipmentId!=null?e.equipmentId:''}">
+	        	<input type="hidden" class="equipmentNo" value="${e.equipmentNo!=null?e.equipmentNo:''}">
 	            <select class="networkType">
 	                <option value="INT" ${e.networkType == 'INT'?'selected':''}>내부망</option>
 	                <option value="EXT" ${e.networkType == 'EXT'?'selected':''}>외부망</option>
@@ -88,7 +100,7 @@
 	    const list = [];
 	    $("#equipmentBody tr").each(function() {
 	        list.push({
-	            equipmentId: $(this).find(".equipmentId").val(),
+	            equipmentNo: $(this).find(".equipmentNo").val(),
 	            userId: $("#userId").val(),
 	            networkType: $(this).find(".networkType").val(),
 	            equipmentType: $(this).find(".equipmentType").val(),
@@ -102,7 +114,7 @@
 	    });
 
 	    $.ajax({
-	        url: "/ites/equipment/save",
+	        url: "/equipment/save",
 	        type: "POST",
 	        contentType: "application/json",
 	        data: JSON.stringify(list),
@@ -115,14 +127,14 @@
 	
 	function deleteRow(btn) {
 	    const tr = $(btn).closest("tr");
-	    const equipmentId = tr.find(".equipmentId").val();
+	    const equipmentNo = tr.find(".equipmentNo").val();
 
-	    if (!equipmentId) {
+	    if (!equipmentNo) {
 	        tr.remove();
 	        return;
 	    }
 
-	    $.post("/ites/equipment/delete", { equipmentId }, function() {
+	    $.post("/equipment/delete", { equipmentNo }, function() {
 	        tr.remove();
 	    });
 	}
@@ -174,14 +186,14 @@
 	    };
 
 	    $.ajax({
-	        url: "/ites/comm/saveToFile",
+	        url: "/comm/saveToFile",
 	        type: "POST",
 	        contentType: "application/json",
 	        data: JSON.stringify(data),
 	        success: function (r) {
 	        	if(r.result === "OK") {
 	        		alert("저장되었습니다.");
-	        		location.href = "/ites/main";
+	        		location.href = "/main";
 	        	} else {
 	        		alert("오류가 발생했습니다.\n" + r.message);
 	        	}
@@ -191,7 +203,7 @@
 	
 	// 전체 현황 엑셀 다운로드
 	function downloadExcel() {
-		location.href = "/ites/comm/file/excel/download";
+		location.href = "/comm/file/excel/download";
 	}
 	
 	// 조회
@@ -218,7 +230,7 @@
 	    };
 		
 		$.ajax({
-	        url: "/ites/comm/getUser",
+	        url: "/comm/getUser",
 	        type: "POST",
 	        contentType: "application/json",
 	        data: JSON.stringify(data),
@@ -252,8 +264,8 @@
 		    <input class="form-input" type="text" id="userName">
 		    <label>사용자ID :</label>
 		    <input class="form-input" type="text" id="userId">
-		    <!-- <button class="btn" onclick="findUser()">확인</button> -->
-		    <button class="btn" onclick="getUser()">조회</button>
+		    <button class="btn" onclick="findUser()">확인</button>
+		    <!-- <button class="btn" onclick="getUser()">조회</button> -->
 		</div>
 		
 		<!-- <input type="hidden" id="userId"> -->
@@ -288,8 +300,8 @@
 		
 		<div class="table-btn-area">
 			<button class="btn" onclick="addRow()">행 추가</button>
-			<!-- <button class="btn" onclick="saveEquipment()">저장</button> -->
-			<button class="btn" onclick="saveToFile()">저장</button>
+			<button class="btn" onclick="saveEquipment()">저장</button>
+			<!-- <button class="btn" onclick="saveToFile()">저장</button> -->
 			<button class="btn" onclick="downloadExcel()">엑셀 다운로드</button>
 		</div>
 	</section>
