@@ -12,8 +12,8 @@ public class MainController {
     }
 	
 	@RequestMapping("/")
-    public String home() {
-        return "redirect:/main.do";
+    public String root() {
+        return "main/main";
     }
 }
 

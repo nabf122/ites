@@ -3,12 +3,12 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <html>
 <head>
-<title>정보화 장비 현황</title>
+<title>장비현황관리시스템</title>
 <script type="text/javaScript">
 	document.location.href="<c:url value='http://localhost:8080/ites/main'/>"
 </script>
 </head>
 <body>
-	정보화 장비 현황
+	장비현황관리시스템
 </body>
 </html>

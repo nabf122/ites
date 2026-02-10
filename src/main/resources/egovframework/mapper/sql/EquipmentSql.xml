@@ -4,7 +4,7 @@
 
     <select id="selectEquipment" resultType="EquipmentVO">
         SELECT
-            equipment_id     AS equipmentId,
+            equipment_no     AS equipmentNo,
             user_id          AS userId,
             network_type	 AS networkType,
             equipment_type   AS equipmentType,
@@ -22,7 +22,7 @@
 
     <insert id="insertEquipment">
         INSERT INTO TB_EQUIPMENT (
-        	equipment_id,
+        	equipment_no,
             user_id,
             network_type,
             equipment_type,
@@ -34,7 +34,7 @@
             acquisition_date,
             remark
         ) VALUES (
-        	#{equipmentId},
+        	#{equipmentNo},
             #{userId},
             #{networkType},
             #{equipmentType},
@@ -60,12 +60,12 @@
             acquisition_date	= #{acquisitionDate},
             remark				= #{remark},
             update_date    		= NOW()
-        WHERE equipment_id 		= #{equipmentId}
+        WHERE equipment_no 		= #{equipmentNo}
     </update>
 
     <delete id="deleteEquipment">
         DELETE FROM TB_EQUIPMENT
-        WHERE equipment_id = #{equipmentId}
+        WHERE equipment_no = #{equipmentNo}
     </delete>
 
 </mapper>
