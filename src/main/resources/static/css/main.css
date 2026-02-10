@@ -1,0 +1,163 @@
+/* =========================
+   공통 테이블 스타일
+   ========================= */
+
+.table-wrap {
+    width: 100%;
+    overflow-x: auto;
+}
+
+/* 기본 테이블 */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    font-size: 14px;
+    color: #333;
+}
+
+/* 헤더 */
+.table thead th {
+    background-color: #f5f7fa;
+    color: #222;
+    font-weight: 600;
+    text-align: center;
+    padding: 10px 8px;
+    border-bottom: 2px solid #dcdfe6;
+    white-space: nowrap;
+}
+
+/* 바디 */
+.table tbody td {
+    padding: 9px 8px;
+    border-bottom: 1px solid #ebeef5;
+    text-align: center;
+}
+
+/* 줄무늬 */
+.table tbody tr:nth-child(even) {
+    background-color: #fafafa;
+}
+
+/* hover */
+.table tbody tr:hover {
+    background-color: #f0f6ff;
+}
+
+/* 선택된 행 */
+.table tbody tr.active {
+    background-color: #e6f0ff;
+}
+
+/* input/select in table */
+.table input,
+.table select {
+    width: 100%;
+    padding: 6px 8px;
+    font-size: 13px;
+    border: 1px solid #dcdfe6;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/* 버튼 */
+/* 테이블 하단 버튼 영역 */
+.table-btn-area {
+    margin-top: 16px;           /* 테이블과 간격 */
+    display: flex;
+    justify-content: flex-end;  /* 오른쪽 정렬 */
+    gap: 8px;                   /* 버튼 간 간격 */
+}
+
+
+.btn {
+    padding: 6px 12px;
+    font-size: 13px;
+    border-radius: 4px;
+    border: 1px solid #cfd4dc;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.btn.primary {
+    background-color: #409eff;
+    border-color: #409eff;
+    color: #fff;
+}
+
+.btn.danger {
+    background-color: #f56c6c;
+    border-color: #f56c6c;
+    color: #fff;
+}
+
+.btn + .btn {
+    margin-left: 4px;
+}
+
+.form-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 8px;
+}
+
+.form-row label {
+    font-weight: 500;
+}
+
+.form-input {
+    width: 240px;
+    height: 34px;
+    padding: 6px 10px;
+    font-size: 14px;
+    border: 1px solid #dcdfe6;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+
+/* 정렬 */
+.text-left   { text-align: left !important; }
+.text-center { text-align: center !important; }
+.text-right  { text-align: right !important; }
+
+/* 반응형 대응 */
+@media screen and (max-width: 768px) {
+    .table {
+        font-size: 13px;
+    }
+
+    .table thead {
+        display: none;
+    }
+
+    .table tbody tr {
+        display: block;
+        margin-bottom: 10px;
+        border: 1px solid #ebeef5;
+    }
+
+    .table tbody td {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 10px;
+        text-align: left;
+    }
+
+    .table tbody td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: #666;
+    }
+}
+
+/* 초기 안내 메시지 */
+.empty-message {
+    padding: 40px 10px;
+    text-align: center;
+    font-size: 15px;
+    color: #909399;
+    background-color: #fafafa;
+    font-weight: 500;
+}

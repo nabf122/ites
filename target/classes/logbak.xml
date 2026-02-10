@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<springProfile name="default">
+		<logger name="org.springframework.web" level="DEBUG" />
+		<logger name="org.springframework.jdbc" level="DEBUG" />
+		<logger name="egovframework.com" level="DEBUG" />
+		<logger name="jdbc.sqltiming" level="DEBUG" />
+		<logger name="jdbc.audit" level="ERROR" />
+		<logger name="com.zaxxer.hikari.HikariConfig" level="ERROR"/>
+		<logger name="com.zaxxer.hikari" level="ERROR"/>
+	</springProfile>
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} %-5level %logger{15} - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<root level="DEBUG">
+		<appender-ref ref="STDOUT" />
+	</root>
+</configuration>

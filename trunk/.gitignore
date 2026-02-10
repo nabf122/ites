@@ -1,0 +1,9 @@
+/target/
+/classes/
+/bin/
+.settings/
+*.class
+.project
+.classpath
+src/main/resources/egovframework/egovProps/globals.properties
+src/main/resources/egovframework/.gitignore

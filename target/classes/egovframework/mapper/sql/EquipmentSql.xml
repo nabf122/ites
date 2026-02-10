@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.equipment.mapper.EquipmentMapper">
+
+    <select id="selectEquipment" resultType="EquipmentVO">
+        SELECT
+            equipment_id     AS equipmentId,
+            user_id          AS userId,
+            network_type	 AS networkType,
+            equipment_type   AS equipmentType,
+            model_name,
+            serial_number,
+            seq,
+            status,
+            acquisition_cost,
+            acquisition_date,
+            remark
+        FROM TB_EQUIPMENT
+        WHERE user_id = #{userId}
+        ORDER BY seq DESC
+    </select>
+
+    <insert id="insertEquipment">
+        INSERT INTO TB_EQUIPMENT (
+        	equipment_id,
+            user_id,
+            network_type,
+            equipment_type,
+            model_name,
+            serial_number,
+            seq,
+            status,
+            acquisition_cost,
+            acquisition_date,
+            remark
+        ) VALUES (
+        	#{equipmentId},
+            #{userId},
+            #{networkType},
+            #{equipmentType},
+            #{modelName},
+            #{serialNumber},
+            #{seq},
+            #{status},
+            #{acquisitionCost},
+            #{acquisitionDate},
+            #{remark}
+        )
+    </insert>
+
+    <update id="updateEquipment">
+        UPDATE TB_EQUIPMENT
+        SET
+            equipment_type 		= #{equipmentType},
+            network_type   		= #{networkType},
+            model_name     		= #{modelName},
+            serial_number  		= #{serialNumber},
+            status         		= #{status},
+            acquisition_cost	= #{acquisitionCost},
+            acquisition_date	= #{acquisitionDate},
+            remark				= #{remark},
+            update_date    		= NOW()
+        WHERE equipment_id 		= #{equipmentId}
+    </update>
+
+    <delete id="deleteEquipment">
+        DELETE FROM TB_EQUIPMENT
+        WHERE equipment_id = #{equipmentId}
+    </delete>
+
+</mapper>
