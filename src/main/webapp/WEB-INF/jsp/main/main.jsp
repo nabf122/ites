@@ -34,30 +34,53 @@
 	        orgName: $("#orgName").val(),
 	        userName: $("#userName").val()
 	    }, function(res) {
+	    	console.log(res);
+	    	console.log(res.userId);
 	        if (!res.userId) {
 	            alert("사용자를 찾을 수 없습니다.");
 	            return;
+	        } else {
+	        	$("#userId").val(res.userId);
+	        	alert("등록된 사용자입니다.");
 	        }
-	        $("#userId").val(res.userId);
+	        
 	        loadEquipment(res.userId);
 	    });
 	}
 	
 	function loadEquipment(userId) {
 	    $.get("/equipment/list", { userId }, function(list) {
-	        let html = "";
+	    	
+	    	const tbody = document.getElementById("equipmentBody");
+	    	tbody.replaceChildren();
+	    	
 	        list.forEach((e) => {
-	            html += makeRow(e);
+	        	tbody.appendChild(makeRow(e));
 	        });
-	        $("#equipmentBody").html(html);
 	    });
 	}
 
 	function makeRow(e = {}) {
-	    return `
+		
+		const template = document.getElementById('equipment-row-template');
+	    const row = template.content.cloneNode(true);
+
+	    row.querySelector('.equipmentId').value = e.equipmentId ?? '';
+	    row.querySelector('.networkType').value = e.networkType ?? 'INT';
+	    row.querySelector('.equipmentType').value = e.equipmentType ?? 'DESKTOP';
+	    row.querySelector('.serialNumber').value = e.serialNumber ?? '';
+	    row.querySelector('.modelName').value = e.modelName ?? '';
+	    row.querySelector('.acquisitionCost').value = e.acquisitionCost ?? '';
+	    row.querySelector('.acquisitionDate').value = e.acquisitionDate ?? '';
+	    row.querySelector('.status').value = e.status ?? 'USE';
+	    row.querySelector('.remark').value = e.remark ?? '';
+	    
+	    return row;
+	    
+	    /* return `
 	    <tr>
 	        <td>
-	        	<input type="hidden" class="equipmentNo" value="${e.equipmentNo!=null?e.equipmentNo:''}">
+	        	<input type="hidden" class="equipmentId" value="${e.equipmentId!=null?e.equipmentId:''}">
 	            <select class="networkType">
 	                <option value="INT" ${e.networkType == 'INT'?'selected':''}>내부망</option>
 	                <option value="EXT" ${e.networkType == 'EXT'?'selected':''}>외부망</option>
@@ -65,11 +88,11 @@
 	        </td>
 	        <td>
 	            <select class="equipmentType">
-	                <option value="DESKTOP" ${e.networkType == 'DESKTOP'?'selected':''}>데스크탑</option>
-	                <option value="LAPTOP" ${e.networkType == 'LAPTOP'?'selected':''}>노트북</option>
-	                <option value="KEYBOARD" ${e.networkType == 'KEYBOARD'?'selected':''}>키보드</option>
-	                <option value="MONITOR" ${e.networkType == 'MONITOR'?'selected':''}>모니터</option>
-	                <option value="ETC" ${e.networkType == 'ETC'?'selected':''}>기타장비</option>
+	                <option value="DESKTOP" ${e.equipmentType == 'DESKTOP'?'selected':''}>데스크탑</option>
+	                <option value="LAPTOP" ${e.equipmentType == 'LAPTOP'?'selected':''}>노트북</option>
+	                <option value="KEYBOARD" ${e.equipmentType == 'KEYBOARD'?'selected':''}>키보드</option>
+	                <option value="MONITOR" ${e.equipmentType == 'MONITOR'?'selected':''}>모니터</option>
+	                <option value="ETC" ${e.equipmentType == 'ETC'?'selected':''}>기타장비</option>
 	            </select>
 	        </td>
 	        <td><input class="serialNumber" value="${e.serialNumber!=null?e.serialNumber:''}"></td>
@@ -86,7 +109,7 @@
 	        <td><input class="remark" value="${e.remark!=null?e.remark:''}"></td>
 	        <td><button class="btn" onclick="deleteRow(this)">삭제</button></td>
 	    </tr>
-	    `;
+	    `; */
 	}
 
 	function addRow() {
@@ -100,7 +123,7 @@
 	    const list = [];
 	    $("#equipmentBody tr").each(function() {
 	        list.push({
-	            equipmentNo: $(this).find(".equipmentNo").val(),
+	            equipmentId: $(this).find(".equipmentId").val(),
 	            userId: $("#userId").val(),
 	            networkType: $(this).find(".networkType").val(),
 	            equipmentType: $(this).find(".equipmentType").val(),
@@ -127,14 +150,14 @@
 	
 	function deleteRow(btn) {
 	    const tr = $(btn).closest("tr");
-	    const equipmentNo = tr.find(".equipmentNo").val();
+	    const equipmentId = tr.find(".equipmentId").val();
 
-	    if (!equipmentNo) {
+	    if (!equipmentId) {
 	        tr.remove();
 	        return;
 	    }
 
-	    $.post("/equipment/delete", { equipmentNo }, function() {
+	    $.post("/equipment/delete", { equipmentId }, function() {
 	        tr.remove();
 	    });
 	}
@@ -308,4 +331,37 @@
 </main>
 <!-- //main -->
 
+<template id="equipment-row-template">
+<tr>
+    <td>
+        <input type="hidden" class="equipmentId">
+        <select class="networkType">
+            <option value="INT">내부망</option>
+            <option value="EXT">외부망</option>
+        </select>
+    </td>
+    <td>
+        <select class="equipmentType">
+            <option value="DESKTOP">데스크탑</option>
+            <option value="LAPTOP">노트북</option>
+            <option value="KEYBOARD">키보드</option>
+            <option value="MONITOR">모니터</option>
+            <option value="ETC">기타장비</option>
+        </select>
+    </td>
+    <td><input class="serialNumber"></td>
+    <td><input class="modelName"></td>
+    <td><input class="acquisitionCost"></td>
+    <td><input type="date" class="acquisitionDate"></td>
+    <td>
+        <select class="status">
+            <option value="USE">사용중</option>
+            <option value="RET">반납</option>
+            <option value="BRK">고장</option>
+        </select>
+    </td>
+    <td><input class="remark"></td>
+    <td><button class="btn btn-delete" onclick="deleteRow(this)">삭제</button></td>
+</tr>
+</template>
 

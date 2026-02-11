@@ -23,6 +23,15 @@ public class UserController {
 	@GetMapping("/find")
 	@ResponseBody
 	public UserVO findUser(UserVO userVO) {
-	    return userService.findUserInfo(userVO.getOrgName(), userVO.getUserName());
+		
+		UserVO resultVO;
+		
+		resultVO = userService.findUserInfo(userVO.getOrgName(), userVO.getUserName()); 
+		
+		System.out.println(resultVO.getOrgName());
+		System.out.println(resultVO.getUserId());
+		System.out.println(resultVO.getUserName());
+		
+	    return resultVO;
 	}
  }

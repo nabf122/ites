@@ -18,9 +18,9 @@ package egovframework.com.ites.equipment.service;
 public class EquipmentVO {
     
 	/**
-     * 장비번호(자산관리번호)
+     * 장비아이디
      */
-    private String equipmentNo = "";
+    private String equipmentId = "";
     /**
      * 사용자 아이디
      */
@@ -57,12 +57,17 @@ public class EquipmentVO {
      * 비고
      */
     private String remark = "";
+    /**
+     * 순번
+     */
+    private int seq = 0;
     
-	public String getEquipmentNo() {
-		return equipmentNo;
+	
+	public String getEquipmentId() {
+		return equipmentId;
 	}
-	public void setEquipmentNo(String equipmentNo) {
-		this.equipmentNo = equipmentNo;
+	public void setEquipmentId(String equipmentId) {
+		this.equipmentId = equipmentId;
 	}
 	public String getUserId() {
 		return userId;
@@ -118,5 +123,12 @@ public class EquipmentVO {
 	public void setRemark(String remark) {
 		this.remark = remark;
 	}
+	public int getSeq() {
+		return seq;
+	}
+	public void setSeq(int seq) {
+		this.seq = seq;
+	}
+	
     
 }

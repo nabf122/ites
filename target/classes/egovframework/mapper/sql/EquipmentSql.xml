@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="egovframework.com.ites.equipment.mapper.EquipmentMapper">
 
     <select id="selectEquipment" resultType="EquipmentVO">
         SELECT
-            equipment_no     AS equipmentNo,
-            user_id          AS userId,
-            network_type	 AS networkType,
-            equipment_type   AS equipmentType,
+            equipment_id,
+            user_id,
+            network_type,
+            equipment_type,
             model_name,
             serial_number,
             seq,
@@ -21,7 +24,7 @@
 
     <insert id="insertEquipment">
         INSERT INTO TB_EQUIPMENT (
-        	equipment_no,
+        	equipment_id,
             user_id,
             network_type,
             equipment_type,
@@ -33,7 +36,7 @@
             acquisition_date,
             remark
         ) VALUES (
-        	#{equipmentNo},
+        	#{equipmentId},
             #{userId},
             #{networkType},
             #{equipmentType},
@@ -59,12 +62,12 @@
             acquisition_date	= #{acquisitionDate},
             remark				= #{remark},
             update_date    		= NOW()
-        WHERE equipment_no 		= #{equipmentNo}
+        WHERE equipment_id 		= #{equipmentId}
     </update>
 
     <delete id="deleteEquipment">
         DELETE FROM TB_EQUIPMENT
-        WHERE equipment_no = #{equipmentNo}
+        WHERE equipment_id = #{equipmentId}
     </delete>
 
 </mapper>
