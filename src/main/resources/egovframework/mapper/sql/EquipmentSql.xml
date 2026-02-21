@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
 <mapper namespace="egovframework.com.ites.equipment.mapper.EquipmentMapper">
 
-    <select id="selectEquipment" resultType="EquipmentVO">
+    <select id="selectEquipmentList" resultType="EquipmentVO">
         SELECT
             equipment_id,
             user_id,
@@ -19,7 +19,26 @@
             remark
         FROM TB_EQUIPMENT
         WHERE user_id = #{userId}
-        ORDER BY seq DESC
+        ORDER BY SEQ
+    </select>
+    
+    <select id="selectAllEquipmentList" resultType="EquipmentVO">
+        SELECT 
+		    TU.ORG_NAME,
+		    TU.USER_NAME,
+		    TU.USER_ID,
+		    TE.NETWORK_TYPE,
+		    TE.EQUIPMENT_TYPE,
+		    TE.SERIAL_NUMBER,
+		    TE.MODEL_NAME,
+		    TE.ACQUISITION_COST,
+		    TE.ACQUISITION_DATE,
+		    TE.STATUS,
+		    TE.REMARK
+		 FROM TB_USER TU, 
+		 	  TB_EQUIPMENT  TE
+		WHERE TU.USER_ID = TE.USER_ID
+		ORDER BY ORG_NAME, USER_NAME, SEQ
     </select>
 
     <insert id="insertEquipment">
@@ -35,19 +54,21 @@
             acquisition_cost,
             acquisition_date,
             remark
-        ) VALUES (
+        ) 
+        SELECT 
         	#{equipmentId},
             #{userId},
             #{networkType},
             #{equipmentType},
             #{modelName},
             #{serialNumber},
-            #{seq},
+            COALESCE(MAX(SEQ), 0) + 1,
             #{status},
             #{acquisitionCost},
             #{acquisitionDate},
             #{remark}
-        )
+          FROM TB_EQUIPMENT
+         WHERE USER_ID =  #{userId}
     </insert>
 
     <update id="updateEquipment">

@@ -2,7 +2,7 @@ package egovframework.com.ites.equipment.service;
 
 /**
  * @Class Name : EquipmentVO.java
- * @Description : 사용자 정보 처리를 위한 VO 클래스
+ * @Description : 장비현황을 처리하기 위한 VO 클래스
  * @Modification Information
  *
  *    수정일       수정자         수정내용
@@ -18,7 +18,7 @@ package egovframework.com.ites.equipment.service;
 public class EquipmentVO {
     
 	/**
-     * 장비아이디
+     * 장비번호(자산관리번호)
      */
     private String equipmentId = "";
     /**
@@ -58,11 +58,24 @@ public class EquipmentVO {
      */
     private String remark = "";
     /**
+     * 상태값
+     */
+    private String rowStatus = "";
+    /**
      * 순번
      */
-    private int seq = 0;
+    private Long seq;
     
-	
+    //엑셀 출력할 때만 사용
+    /**
+     * 사용자명
+     */
+	private String userName = "";
+    /**
+     * 부서명
+     */
+	private String orgName = "";
+    
 	public String getEquipmentId() {
 		return equipmentId;
 	}
@@ -123,12 +136,30 @@ public class EquipmentVO {
 	public void setRemark(String remark) {
 		this.remark = remark;
 	}
-	public int getSeq() {
+	public String getRowStatus() {
+		return rowStatus;
+	}
+	public void setRowStatus(String rowStatus) {
+		this.rowStatus = rowStatus;
+	}
+	public Long getSeq() {
 		return seq;
 	}
-	public void setSeq(int seq) {
+	public void setSeq(Long seq) {
 		this.seq = seq;
 	}
 	
-    
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+	public String getOrgName() {
+		return orgName;
+	}
+	public void setOrgName(String orgName) {
+		this.orgName = orgName;
+	}
+	
 }

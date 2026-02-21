@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
 <mapper namespace="egovframework.com.ites.user.mapper.UserMapper">
 
-    <select id="selectUserInfo" resultType="egovframework.com.ites.user.service.UserVO">
+    <select id="selectUserInfo" resultType="UserVO">
         SELECT *
           FROM TB_USER
          WHERE ORG_NAME = #{orgName}

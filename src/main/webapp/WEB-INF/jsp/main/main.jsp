@@ -7,25 +7,35 @@
 	prefix="sec"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <c:set var="now" value="<%=new java.util.Date()%>" />
-<c:set var="sysYear"><fmt:formatDate value="${now}" pattern="yyyy" /></c:set> 
-<c:set var="sysMonth"><fmt:formatDate value="${now}" pattern="MM" /></c:set>
-<c:set var="sysdate"><fmt:formatDate value="${now}" pattern="yyyyMMdd" /></c:set>
-<c:set var="sysdateTime"><fmt:formatDate value="${now}" pattern="yyyyMMddHHmm" /></c:set>
+<c:set var="sysYear">
+	<fmt:formatDate value="${now}" pattern="yyyy" />
+</c:set>
+<c:set var="sysMonth">
+	<fmt:formatDate value="${now}" pattern="MM" />
+</c:set>
+<c:set var="sysdate">
+	<fmt:formatDate value="${now}" pattern="yyyyMMdd" />
+</c:set>
+<c:set var="sysdateTime">
+	<fmt:formatDate value="${now}" pattern="yyyyMMddHHmm" />
+</c:set>
+
 <head>
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/css/main.css">
 </head>
 
 <script src="${pageContext.request.contextPath}/js/jquery-3.6.0.min.js"></script>
 <script>
-	function findUser() {
+
+	// 사용자 조회
+	function findUserInfo() {
 		
-		// Validation 체크
-		if($("#orgName").val().trim() === ""){
+		if($("#orgName").val().trim() === "") {
 			alert("부서명은 필수 값입니다.");
 			return;
 		}
 		
-		if($("#userName").val().trim() === ""){
+		if($("#userName").val().trim() === "") {
 			alert("사용자명은 필수 값입니다.");
 			return;
 		}
@@ -34,20 +44,19 @@
 	        orgName: $("#orgName").val(),
 	        userName: $("#userName").val()
 	    }, function(res) {
-	    	console.log(res);
-	    	console.log(res.userId);
 	        if (!res.userId) {
 	            alert("사용자를 찾을 수 없습니다.");
 	            return;
-	        } else {
-	        	$("#userId").val(res.userId);
-	        	alert("등록된 사용자입니다.");
 	        }
+	        alert("사용자 정보를 불러왔습니다.");
+	        $("#userFlag").val("Y");
+	        $("#userId").val(res.userId);
 	        
 	        loadEquipment(res.userId);
 	    });
 	}
 	
+	// 사용자의 장비현황 조회
 	function loadEquipment(userId) {
 	    $.get("/equipment/list", { userId }, function(list) {
 	    	
@@ -60,6 +69,7 @@
 	    });
 	}
 
+	// row 만들기
 	function makeRow(e = {}) {
 		
 		const template = document.getElementById('equipment-row-template');
@@ -76,50 +86,59 @@
 	    row.querySelector('.remark').value = e.remark ?? '';
 	    
 	    return row;
-	    
-	    /* return `
-	    <tr>
-	        <td>
-	        	<input type="hidden" class="equipmentId" value="${e.equipmentId!=null?e.equipmentId:''}">
-	            <select class="networkType">
-	                <option value="INT" ${e.networkType == 'INT'?'selected':''}>내부망</option>
-	                <option value="EXT" ${e.networkType == 'EXT'?'selected':''}>외부망</option>
-	            </select>
-	        </td>
-	        <td>
-	            <select class="equipmentType">
-	                <option value="DESKTOP" ${e.equipmentType == 'DESKTOP'?'selected':''}>데스크탑</option>
-	                <option value="LAPTOP" ${e.equipmentType == 'LAPTOP'?'selected':''}>노트북</option>
-	                <option value="KEYBOARD" ${e.equipmentType == 'KEYBOARD'?'selected':''}>키보드</option>
-	                <option value="MONITOR" ${e.equipmentType == 'MONITOR'?'selected':''}>모니터</option>
-	                <option value="ETC" ${e.equipmentType == 'ETC'?'selected':''}>기타장비</option>
-	            </select>
-	        </td>
-	        <td><input class="serialNumber" value="${e.serialNumber!=null?e.serialNumber:''}"></td>
-	        <td><input class="modelName" value="${e.modelName!=null?e.modelName:''}"></td>
-	        <td><input class="acquisitionCost" value="${e.acquisitionCost!=null?e.acquisitionCost:''}"></td>
-	        <td><input type="date" class="acquisitionDate" value="${e.acquisitionDate!=null?e.acquisitionDate:''}"></td>
-	        <td>
-	            <select class="status">
-	                <option value="USE" ${e.status == 'USE'?'selected':''}>사용중</option>
-	                <option value="RET" ${e.status == 'RET'?'selected':''}>반납</option>
-	                <option value="BRK" ${e.status == 'BRK'?'selected':''}>고장</option>
-	            </select>
-	        </td>
-	        <td><input class="remark" value="${e.remark!=null?e.remark:''}"></td>
-	        <td><button class="btn" onclick="deleteRow(this)">삭제</button></td>
-	    </tr>
-	    `; */
 	}
 
+	// 행 추가
 	function addRow() {
 		
 		$("#emptyRow").remove();
-		
-	    $("#equipmentBody").append(makeRow({}));
+		$("#equipmentBody").append(makeRow({}));
 	}
 
+	// 장비 저장(생성/수정/삭제)에 대한 처리
 	function saveEquipment() {
+		
+		// Validation 체크
+		if($("#orgName").val().trim() === "") {
+			alert("부서명은 필수 값입니다.");
+			return;
+		}
+		
+		if($("#userName").val().trim() === "") {
+			alert("사용자명은 필수 값입니다.");
+			return;
+		}
+		
+		if($("#userId").val().trim() === "") {
+			alert("사용자ID는 필수 값입니다.");
+			return;
+		}
+		
+		if($("#userId").val().trim() === "") {
+			alert("사용자ID는 필수 값입니다.");
+			return;
+		}
+		
+		if($("#userFlag").val().trim() === "N") {
+			alert("등록되지 않은 사용자입니다.\n'확인' 버튼을 눌러 등록된 사용자인지 확인하세요.");
+			return;
+		}
+		
+		if($("#equipmentBody tr").length == 1 && $("#equipmentBody tr").attr("id") === "emptyRow") {
+			alert("행 추가를 눌러서 장비를 입력해주세요.");
+			return;
+		}
+		// Validation 체크 종료
+		
+		if (!confirm("저장하시겠습니까?")) {
+	        return; // 취소 누르면 종료
+	    }
+		
+		// 취득가액 ',' 특수문자 일괄 제거
+		$(".acquisitionCost").each(function() {
+		    this.value = this.value.replace(/,/g, '');
+		});
+		
 	    const list = [];
 	    $("#equipmentBody tr").each(function() {
 	        list.push({
@@ -132,7 +151,8 @@
 	            acquisitionCost: $(this).find(".acquisitionCost").val(),
 	            acquisitionDate: $(this).find(".acquisitionDate").val(),
 	            status: $(this).find(".status").val(),
-	            remark: $(this).find(".remark").val()
+	            remark: $(this).find(".remark").val(),
+	            rowStatus: $(this).find(".rowStatus").val()
 	        });
 	    });
 
@@ -141,227 +161,156 @@
 	        type: "POST",
 	        contentType: "application/json",
 	        data: JSON.stringify(list),
-	        success: function() {
-	            alert("저장되었습니다.");
-	            loadEquipment($("#userId").val());
+	        success: function(res) {
+	        	if(res.success){
+	        		alert("저장되었습니다.");
+		            loadEquipment($("#userId").val());
+	        	} else {
+	        		alert(res.message);
+	        		console.log(res.error);
+	        	}
+	        },
+	        error: function(xhr) {
+	            if (xhr.responseJSON && xhr.responseJSON.message) {
+	                alert(xhr.responseJSON.message);
+	            } else {
+	                alert("서버 오류가 발생했습니다.");
+	            }
 	        }
 	    });
 	}
 	
+	// 삭제 버튼 클릭 처리
 	function deleteRow(btn) {
-	    const tr = $(btn).closest("tr");
-	    const equipmentId = tr.find(".equipmentId").val();
+	    const $tr = $(btn).closest("tr");
+	    const equipmentId = $tr.find(".equipmentId").val();
+	    
+	    if (!confirm("삭제하시겠습니까?")) return;
 
 	    if (!equipmentId) {
-	        tr.remove();
+	        $tr.remove();
 	        return;
+	    } else {
+	    	$tr.addClass("deleted-row");
+	    	$tr.find(".rowStatus").val("D");
 	    }
 
-	    $.post("/equipment/delete", { equipmentId }, function() {
-	        tr.remove();
-	    });
 	}
 	
-	// 파일(csv)로 저장
-	function saveToFile() {
-		
-		// Validation 체크
-		if($("#orgName").val().trim() === ""){
-			alert("부서명은 필수 값입니다.");
-			return;
-		}
-		
-		if($("#userName").val().trim() === ""){
-			alert("사용자명은 필수 값입니다.");
-			return;
-		}
-		
-		if($("#userId").val().trim() === ""){
-			alert("사용자ID는 필수 값입니다.");
-			return;
-		}
-		
-		if($("#equipmentBody tr").length == 1 && $("#equipmentBody tr").attr("id") === "emptyRow") {
-			alert("행 추가를 눌러서 장비를 입력해주세요.");
-			return;
-		}
-		
-		// 저장 시작
-	    const equipmentList = [];
-	    $("#equipmentBody tr").each(function () {
-	        equipmentList.push({
-	            networkType: $(this).find(".networkType").val(),
-	            equipmentType: $(this).find(".equipmentType").val(),
-	            serialNumber: $(this).find(".serialNumber").val(),
-	            modelName: $(this).find(".modelName").val(),
-	            acquisitionCost: $(this).find(".acquisitionCost").val(),
-	            acquisitionDate: $(this).find(".acquisitionDate").val(),
-	            status: $(this).find(".status").val(),
-	            remark: $(this).find(".remark").val()
-	        });
-	    });
-
-	    const data = {
-	    		orgName: $("#orgName").val(),
-	        userName: $("#userName").val(),
-	        userId: $("#userId").val(),
-	        equipmentList: equipmentList
-	    };
-
-	    $.ajax({
-	        url: "/comm/saveToFile",
-	        type: "POST",
-	        contentType: "application/json",
-	        data: JSON.stringify(data),
-	        success: function (r) {
-	        	if(r.result === "OK") {
-	        		alert("저장되었습니다.");
-	        		location.href = "/main";
-	        	} else {
-	        		alert("오류가 발생했습니다.\n" + r.message);
-	        	}
-	        }
-	    });
-	}
-	
-	// 전체 현황 엑셀 다운로드
+	// 엑셀 다운로드
 	function downloadExcel() {
-		location.href = "/comm/file/excel/download";
+		location.href = "/equipment/excel";
 	}
 	
-	// 조회
-	function getUser() {
-		if($("#orgName").val().trim() === ""){
-			alert("부서명은 필수 값입니다.");
-			return;
-		}
-		
-		if($("#userName").val().trim() === ""){
-			alert("사용자명은 필수 값입니다.");
-			return;
-		}
-		
-		if($("#userId").val().trim() === ""){
-			alert("사용자ID는 필수 값입니다.");
-			return;
-		}
-		
-		const data = {
-	    		orgName: $("#orgName").val(),
-	        userName: $("#userName").val(),
-	        userId: $("#userId").val()
-	    };
-		
-		$.ajax({
-	        url: "/comm/getUser",
-	        type: "POST",
-	        contentType: "application/json",
-	        data: JSON.stringify(data),
-	        success: function (list) {
-	        	console.log(list);
-	            const tbody = $("#equipmentBody tbody");
-	            tbody.empty();
-	            
-	            let html = "";
-	            list.forEach(function(e) {
-	            	html += makeRow(e);
-	            });
-	            $("#equipmentBody").html(html);
-		        
-	            alert("조회하였습니다.");
-	    	}
-		});
-	}
+	// 수정 상태 반영
+	$(document).on("change", 
+		".networkType, .equipmentType, .serialNumber, .modelName, .acquisitionCost, .acquisitionDate, .status, .remark",
+		function () {
+
+		    const $tr = $(this).closest("tr");
+		    const $status = $tr.find(".rowStatus");
+			
+		    if($tr.find(".equipmentId").val() != "" && $status.val() != "D") {
+		    	$status.val("U");
+		    }
+	});
+
+	// 포커스 인 → 콤마 제거
+	$(document).on("focus", ".acquisitionCost", function() {
+	    this.value = this.value.replace(/,/g, '');
+	});
+
+	// 포커스 아웃 → 콤마 적용
+	$(document).on("blur", ".acquisitionCost", function() {
+	    let value = this.value.replace(/[^0-9]/g, '');
+	    this.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	});
 
 </script>
 
-<!-- main -->
-<title>정보화 장비 현황</title>
-<main id="content">
-	<!-- section01 main -->
-	<section class="ctn01">
+<!--  -->
+<title>장비현황관리</title>
+<div class="container">
+	<div class="row">
 		<div class="form-row">
-		    <label>부서명 :</label>
-		    <input class="form-input" type="text" id="orgName">
-		    <label>사용자명 :</label>
-		    <input class="form-input" type="text" id="userName">
-		    <label>사용자ID :</label>
-		    <input class="form-input" type="text" id="userId">
-		    <button class="btn" onclick="findUser()">확인</button>
-		    <!-- <button class="btn" onclick="getUser()">조회</button> -->
+			<input type="hidden" id="userFlag" value = "N">
+			<label>부서</label> 
+			<input class="form-input" type="text" id="orgName"> 
+				
+			<label>사용자</label> 
+			<input class="form-input" type="text" id="userName">
+			
+			<label>사번</label>
+			<input class="form-input" type="text" id="userId">
+			
+			<button class="btn primary" onclick="findUserInfo()">확인</button>
 		</div>
-		
-		<!-- <input type="hidden" id="userId"> -->
-	</section>
-	<!-- //section01 main -->
-
-	<section>
+	
 		<table class="table">
-		    <thead>
-		        <tr>
-		            <th>망구분</th>
-		            <th>장비타입</th>
-		            <th>시리얼번호</th>
-		            <th>모델명</th>
-		            <th>취득가액</th>
-		            <th>취득시기</th>
-		            <th>상태</th>
-		            <th>비고</th>
-		            <th>관리</th>
-		        </tr>
-		    </thead>
-		    <tbody id="equipmentBody">
-			    <!-- 초기 안내 메시지 -->
-		        <tr id="emptyRow">
-		            <td colspan="9" class="empty-message">
-		                사용자 확인을 먼저 하세요.<br>
-   						<small>(상단에서 부서명 / 사용자명을 입력 후 확인)</small>
-		            </td>
-		        </tr>
-		    </tbody>
+			<thead>
+				<tr>
+					<th>망구분</th>
+					<th>장비타입</th>
+					<th>시리얼번호</th>
+					<th>모델명</th>
+					<th>취득가액</th>
+					<th>취득시기</th>
+					<th>상태</th>
+					<th>비고</th>
+					<th>관리</th>
+				</tr>
+			</thead>
+			<tbody id="equipmentBody">
+				<!-- 초기 안내 메시지 -->
+				<tr id="emptyRow">
+					<td colspan="9" class="empty-message">사용자 확인을 먼저 하세요.<br>
+						<small>(상단에서 부서/사용자를 입력 후 확인)</small>
+					</td>
+				</tr>
+			</tbody>
 		</table>
-		
+
 		<div class="table-btn-area">
 			<button class="btn" onclick="addRow()">행 추가</button>
-			<button class="btn" onclick="saveEquipment()">저장</button>
-			<!-- <button class="btn" onclick="saveToFile()">저장</button> -->
-			<button class="btn" onclick="downloadExcel()">엑셀 다운로드</button>
+			<button class="btn primary" onclick="saveEquipment()">저장</button>
+			<button class="excel-btn" onclick="downloadExcel()">엑셀 다운로드(전체)</button>
 		</div>
-	</section>
-</main>
-<!-- //main -->
+	</div>
+</div>
+
+<!-- // -->
 
 <template id="equipment-row-template">
-<tr>
-    <td>
-        <input type="hidden" class="equipmentId">
-        <select class="networkType">
-            <option value="INT">내부망</option>
-            <option value="EXT">외부망</option>
-        </select>
-    </td>
-    <td>
-        <select class="equipmentType">
-            <option value="DESKTOP">데스크탑</option>
-            <option value="LAPTOP">노트북</option>
-            <option value="KEYBOARD">키보드</option>
-            <option value="MONITOR">모니터</option>
-            <option value="ETC">기타장비</option>
-        </select>
-    </td>
-    <td><input class="serialNumber"></td>
-    <td><input class="modelName"></td>
-    <td><input class="acquisitionCost"></td>
-    <td><input type="date" class="acquisitionDate"></td>
-    <td>
-        <select class="status">
-            <option value="USE">사용중</option>
-            <option value="RET">반납</option>
-            <option value="BRK">고장</option>
-        </select>
-    </td>
-    <td><input class="remark"></td>
-    <td><button class="btn btn-delete" onclick="deleteRow(this)">삭제</button></td>
-</tr>
+	<tr>
+	    <td>
+	        <input type="hidden" class="equipmentId">
+	        <input type="hidden" class="rowStatus">
+	        <select class="networkType">
+	            <option value="INT">내부망</option>
+	            <option value="EXT">외부망</option>
+	        </select>
+	    </td>
+	    <td>
+	        <select class="equipmentType">
+	            <option value="DESKTOP">데스크탑</option>
+	            <option value="LAPTOP">노트북</option>
+	            <option value="KEYBOARD">키보드</option>
+	            <option value="MONITOR">모니터</option>
+	            <option value="ETC">기타장비</option>
+	        </select>
+	    </td>
+	    <td><input class="serialNumber"></td>
+	    <td><input class="modelName"></td>
+	    <td><input class="acquisitionCost"></td>
+	    <td><input type="date" class="acquisitionDate"></td>
+	    <td>
+	        <select class="status">
+	            <option value="USE">사용중</option>
+	            <option value="RET">반납</option>
+	            <option value="BRK">고장</option>
+	        </select>
+	    </td>
+	    <td><input class="remark"></td>
+	    <td><button class="btn btn-delete" onclick="deleteRow(this)">삭제</button></td>
+	</tr>
 </template>
-

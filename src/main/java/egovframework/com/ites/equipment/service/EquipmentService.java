@@ -18,29 +18,39 @@ public class EquipmentService {
         this.equipmentMapper = equipmentMapper;
     }
 
-    public List<EquipmentVO> getUserEquipment(String userId) {
-        return equipmentMapper.selectEquipment(userId);
+	// 사용자 ID로 장비 현황 조회 
+    public List<EquipmentVO> getEquipmentListByUserId(String userId) {
+        return equipmentMapper.selectEquipmentList(userId);
+    }
+    
+    // 엑셀 출력을 위해 모든 현황 조회
+    public List<EquipmentVO> getAllEquipmentList() {
+        return equipmentMapper.selectAllEquipmentList();
     }
 
+    // 장비
 	public void saveAll(List<EquipmentVO> list) {
 		// TODO Auto-generated method stub
-		
 		String newEquipmentId = "";
-		int i = 1; // 순번
+				
 		for (EquipmentVO vo : list) {
-	        if (vo.getEquipmentId().equals("")) {
-	        	newEquipmentId = UUID.randomUUID().toString();
-	        	vo.setEquipmentId(newEquipmentId);
-	        	vo.setSeq(i);
-	        	equipmentMapper.insertEquipment(vo);
-	        } else {
-	        	equipmentMapper.updateEquipment(vo);
-	        }
-	        i++;
-	    }
+			if (vo.getEquipmentId().equals("") && vo.getRowStatus().equals("")) { // 생성
+				newEquipmentId = UUID.randomUUID().toString(); // 신규 장비아이디 생성
+			    vo.setEquipmentId(newEquipmentId);
+			        	
+			    equipmentMapper.insertEquipment(vo);
+			} else if(!vo.getEquipmentId().equals("") && vo.getRowStatus().equals("U")) { // 수정
+				equipmentMapper.updateEquipment(vo);
+				
+			} else if(!vo.getEquipmentId().equals("") && vo.getRowStatus().equals("D")) { // 삭제
+				equipmentMapper.deleteEquipment(vo.getEquipmentId());
+				
+			}
+		}
 	}
     
     public void removeEquipment(String equipmentId) {
+    	
         equipmentMapper.deleteEquipment(equipmentId);
     }
 

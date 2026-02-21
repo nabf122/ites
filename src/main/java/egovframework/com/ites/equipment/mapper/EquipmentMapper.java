@@ -6,11 +6,13 @@ import egovframework.com.ites.equipment.service.EquipmentVO;
 
 public interface EquipmentMapper {
 
-    List<EquipmentVO> selectEquipment(String userId);
+	List<EquipmentVO> selectEquipmentList(String userId);
 
     void insertEquipment(EquipmentVO vo);
 
     void updateEquipment(EquipmentVO vo);
 
-    void deleteEquipment(String equipmentNo);
+    void deleteEquipment(String equipmentId);
+
+	List<EquipmentVO> selectAllEquipmentList();
 }
