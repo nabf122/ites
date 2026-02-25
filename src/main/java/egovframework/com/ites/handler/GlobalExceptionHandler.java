@@ -1,4 +1,4 @@
-package egovframework.com.comm;
+package egovframework.com.ites.handler;
 
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

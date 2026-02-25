@@ -10,4 +10,13 @@ public interface UserMapper {
 		    @Param("orgName") String orgName,
 		    @Param("userName") String userName
 		);
+	
+	UserVO selectLoginUser(
+		    @Param("userId") String userId,
+		    @Param("userPw") String userPw
+		);
+
+	void updateLastLoginDt(
+			@Param("userId") String userId
+		);
 }

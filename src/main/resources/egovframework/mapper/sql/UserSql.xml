@@ -10,4 +10,20 @@
          WHERE ORG_NAME = #{orgName}
            AND USER_NAME = #{userName}
     </select>
+    
+    <select id="selectLoginUser" resultType="UserVO">
+        SELECT USER_ID
+             , USER_NAME
+             , ROLE
+          FROM TB_USER
+         WHERE USER_ID = #{userId}
+           AND USER_PW = #{userPw}
+           AND USE_YN = 'Y'
+    </select>
+    
+    <update id="updateLastLoginDt">
+        UPDATE TB_USER
+           SET LAST_LOGIN_DT = NOW()
+         WHERE USER_ID = #{userId}
+    </update>
 </mapper>

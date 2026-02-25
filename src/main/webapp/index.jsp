@@ -5,7 +5,7 @@
 <head>
 <title>장비현황관리시스템</title>
 <script type="text/javaScript">
-	document.location.href="<c:url value='http://localhost:8080/main'/>"
+	document.location.href="<c:url value='http://localhost:8080/auth/login'/>"
 </script>
 </head>
 <body>

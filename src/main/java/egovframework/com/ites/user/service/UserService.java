@@ -19,5 +19,15 @@ public class UserService {
     public UserVO findUserInfo(String orgName, String userName) {
         return userMapper.selectUserInfo(orgName, userName);
     }
+    
+    public UserVO loginUser(String userId, String userPw) {
+        return userMapper.selectLoginUser(userId, userPw);
+    }
+
+	public void updateLastLoginDt(String userId) {
+		// TODO Auto-generated method stub
+		userMapper.updateLastLoginDt(userId);
+		
+	}
 }
 

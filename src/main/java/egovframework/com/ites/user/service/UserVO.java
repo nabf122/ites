@@ -29,7 +29,15 @@ public class UserVO {
      * 부서명
      */
 	private String orgName = "";
-    
+	/**
+     * 사용자 패스워드
+     */
+	private String userPw = "";
+	/**
+     * 권한 USER or ADMIN
+     */
+	private String role = "";
+	
 	public String getUserId() {
 		return userId;
 	}
@@ -47,6 +55,18 @@ public class UserVO {
 	}
 	public void setOrgName(String orgName) {
 		this.orgName = orgName;
+	}
+	public String getUserPw() {
+		return userPw;
+	}
+	public void setUserPw(String userPw) {
+		this.userPw = userPw;
+	}
+	public String getRole() {
+		return role;
+	}
+	public void setRole(String role) {
+		this.role = role;
 	}
 
 }
